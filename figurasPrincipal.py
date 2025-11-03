@@ -1,30 +1,38 @@
-import pandas as p
+import pandas as pd
 import math
 
+# Leer archivo CSV
 dataFile = pd.read_csv("figuras.csv")
-
-print("Procesando figuras ...\n")
 
 areas = []
 
-
+# Recorre todas las filas del archivo
 for index, row in dataFile.iterrows():
+    figura = row['FIGURA'].strip().lower()
+    m1 = row['MEDIDA1']
+    m2 = row['MEDIDA2']
 
-	figura = row['FIGURA'].strip().upper()
-   	m1 = row['MEDIDA1']
-    	m2 = row['MEDIDA2']
+    # Calcular el área según la figura
+    if figura == 't':  # triángulo
+        area = (m1 * m2) / 2
+    elif figura == 'r':  # rectángulo
+        area = m1 * m2
+    elif figura == 'c':  # círculo
+        area = math.pi * (m1 ** 2)
+    else:
+        area = None
 
-    	# Calcular según la figura
-    	if figura == "r":
-        	area = m1 * m2
+    areas.append(area)
 
+    print(f"Fila {index}: FIGURA = {figura}, Medida1 = {m1}, Medida2 = {m2}, Área = {area}")
 
-    	elif figura == "c":
-        	area = math.pi * m1 ** 2
-        	perimetro = 2 * math.pi * m1
+# Agrega las áreas al DataFrame
+dataFile["AREA"] = areas
 
-    	elif figura == "t":
-        	area = (m1 * m2) / 2
+# Muestra los resultados finales
+print("\nResultados finales:\n", dataFile)
 
+# (Opcional) Guardar el nuevo archivo con los resultados
+dataFile.to_csv("figuras_con_areas.csv", index=False)
+print("\nArchivo 'figuras_con_areas.csv' creado con éxito.")
 
-print(f"Fila {index}: FIGURA = {row['FIGURA']}, Medida1 = {row['MEDIDA']}, Medida2 = {row['MEDIDA2']}")	
